@@ -1,0 +1,20 @@
+@import '../variables.scss';
+$navHeight:50px;
+// div {
+//   height: $navHeight;
+// }
+.navbar {
+    height: 50px;
+}
+
+.navbar-collapse {
+    z-index: 3;
+}
+
+@media only screen and (max-width: 600px) {
+    .nav-item {
+        background-color: #343A40;
+        border: solid 1px white;
+        padding: 5px;
+    }
+}

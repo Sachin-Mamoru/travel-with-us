@@ -1,0 +1,11 @@
+.img-slider {
+    width: 73vw;
+    height: 74vh;
+}
+
+@media only screen and (max-width: 600px) {
+    .img-slider {
+        height: 250px;
+        width: 100%;
+    }
+}

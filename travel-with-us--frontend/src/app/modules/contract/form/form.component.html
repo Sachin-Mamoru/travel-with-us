@@ -1,0 +1,263 @@
+<div class="form">
+    <div fxLayout="column">
+        <div fxFlexAlign="center" fxFlex="100%" style="padding: 3%;">
+            <h2 style="
+          color: rgb(142, 144, 168);
+          font-size: 45px;
+          text-align: center;
+          margin-bottom: 5%;
+        ">
+                <u>Contract Form</u>
+            </h2>
+            <form [formGroup]="contractForm">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Contract Name</mat-label>
+                            <textarea matInput placeholder="name" formControlName="name" autocomplete="off"></textarea>
+                            <mat-error *ngIf="name.invalid && name.touched" class="has-text-danger">
+                                Add a proper contract name
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Contract Type</mat-label>
+                            <textarea matInput placeholder="type" formControlName="type" autocomplete="off"></textarea>
+                            <mat-error *ngIf="type.invalid && type.touched" class="has-text-danger">
+                                Add a proper contract type
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Contract description</mat-label>
+                        <textarea matInput placeholder="description" formControlName="description" autocomplete="off"></textarea>
+                        <mat-error *ngIf="description.invalid && description.touched" class="has-text-danger">
+                            Add a proper contract description
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-group" *ngIf="!newHotel" [ngStyle]="{'margin-bottom': !newHotel ? '60px' : null, 'margin-top': !newHotel ? '40px' : null}">
+                    <mat-expansion-panel style="overflow: visible; background: #e6e4e5;">
+                        <mat-expansion-panel-header style="height: 65px;">
+                            <mat-panel-title>
+                                Search Hotel
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                Selectd Hotel : <span style="font-weight: bold;"> {{selectedHotel}}</span>
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <mat-form-field floatLabel="never" class="search-field" appearance="fill">
+                            <mat-label>Search Hotel</mat-label>
+                            <input matInput placeholder="Search Hotels" type="text" (keyup)="onKey($event)" />
+                        </mat-form-field>
+                        <div>
+                            <div class="row" style="margin: 0px;" *ngFor="let hotel of hotels; let i = index">
+                                <button type="button" class="hotel-card row" (click)="onSelectedHotel(hotel)">
+                  <div class="col-md-6">
+                    <h4 style="margin-bottom: 0px;">
+                      Name : {{ hotel.hotelName }}
+                    </h4>
+                  </div>
+                  <div class="col-md-6">
+                    <h4 style="margin-bottom: 0px;">
+                      Email : {{ hotel.email }}
+                    </h4>
+                  </div>
+                </button>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </div>
+                <button mat-stroked-button style="width: 100%; margin-bottom: 5%;" *ngIf="!newHotel" type="button" (click)="onAddHotel()">
+          <b>+ Add New Hotel</b>
+        </button>
+                <button mat-stroked-button style="width: 100%; margin-bottom: 5%;" *ngIf="newHotel" type="button" (click)="onSelectHotel()">
+          <b>Select Existing Hotel</b>
+        </button>
+                <form [formGroup]="hotelForm" *ngIf="newHotel" style="border-bottom: solid 1px black; margin-bottom: 3%;">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Hotel Name</mat-label>
+                                <textarea matInput placeholder="Hotel Name" formControlName="hotel_name" autocomplete="off"></textarea>
+                                <mat-error *ngIf="hotel_name.invalid && hotel_name.touched" class="has-text-danger">
+                                    Add a proper hotel name
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Hotel Address</mat-label>
+                                <textarea matInput placeholder="address" formControlName="address" autocomplete="off"></textarea>
+                                <mat-error *ngIf="address.invalid && address.touched" class="has-text-danger">
+                                    Add a proper address
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <mat-expansion-panel style="overflow: visible; background: #e6e4e5;">
+                                <mat-expansion-panel-header style="height: 65px;">
+                                    <mat-panel-title>
+                                        Add Hotel Phone No
+                                    </mat-panel-title>
+                                    <mat-panel-description> </mat-panel-description>
+                                </mat-expansion-panel-header>
+
+                                <div formArrayName="phone">
+                                    <div class="form-group" *ngFor="let contactNo of phone.controls; let i = index">
+                                        <div [formGroupName]="i">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-10">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label>Contact Numbers</mat-label>
+                                                        <input matInput placeholder="Contact number" formControlName="contact_no" />
+                                                        <mat-error *ngIf="
+                                contact_no(i).invalid && contact_no(i).touched
+                              " class="has-text-danger">
+                                                            Add a contact number
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <button class="delete-btn" matSuffix mat-icon-button type="button" (click)="onDeletePhoneNo(i)">
+                            <mat-icon
+                              style="
+                                vertical-align: text-top;
+                                border: solid 1px black;
+                                border-radius: 50%;
+                                padding: 5px;
+                                height: 35px;
+                                width: 35px;
+                              "
+                              >delete</mat-icon
+                            >
+                          </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button mat-stroked-button style="width: 100%; margin-bottom: 5%;" type="button" (click)="onAddPhoneNo()">
+                  <b>+ Add Phone No</b>
+                </button>
+                            </mat-expansion-panel>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Hotel Email</mat-label>
+                                <textarea matInput placeholder="email" formControlName="email" autocomplete="off"></textarea>
+                                <mat-error *ngIf="email.invalid && email.touched" class="has-text-danger">
+                                    Add a proper email
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </form>
+                <div formArrayName="room_types">
+                    <div class="form-group" *ngFor="let room_type of room_types.controls; let i = index">
+                        <div [formGroupName]="i">
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Room Type {{ i + 1 }}</mat-label>
+                                        <input matInput placeholder="Room Type {{ i + 1 }}" formControlName="type_name" />
+                                        <mat-error *ngIf="type_name(i).invalid && type_name(i).touched" class="has-text-danger">
+                                            Add Room Type
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>No of Rooms</mat-label>
+                                        <input matInput type="number" placeholder="No of Rooms" formControlName="no_of_rooms" />
+                                        <mat-error *ngIf="no_of_rooms(i).invalid && no_of_rooms(i).touched" class="has-text-danger">
+                                            Add No of Rooms
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Price</mat-label>
+                                        <input matInput type="number" placeholder="Room Price" formControlName="price" />
+                                        <mat-error *ngIf="price(i).invalid && price(i).touched" class="has-text-danger">
+                                            Add Room Price
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Maximum Adults</mat-label>
+                                        <input matInput type="number" placeholder="Maximum Adults" formControlName="max_adults" />
+                                        <mat-error *ngIf="max_adults(i).invalid && max_adults(i).touched" class="has-text-danger">
+                                            Add Maximum Adults Count
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <button class="delete-btn" fxFlex="15%" style="margin-left: 10%;" matSuffix mat-icon-button type="button" (click)="onDeleteRoomType(i)">
+                    <mat-icon
+                      style="
+                        vertical-align: text-top;
+                        border: solid 1px black;
+                        border-radius: 50%;
+                        padding: 5px;
+                        height: 35px;
+                        width: 35px;
+                      "
+                      >delete</mat-icon
+                    >
+                  </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button mat-stroked-button style="width: 100%; margin-bottom: 5%;" type="button" (click)="onAddRoomType()">
+          <b>+ Add Room Type</b>
+        </button>
+                <div class="form-group">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Markup</mat-label>
+                        <input matInput type="number" placeholder="markup" formControlName="markup" autocomplete="off" />
+                        <mat-error *ngIf="markup.invalid && markup.touched" class="has-text-danger">
+                            Add a markup
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Choose a Contract Start Date</mat-label>
+                            <input matInput [min]="minDate" formControlName="start_date" [matDatepicker]="picker" />
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            <mat-error *ngIf="start_date.invalid && start_date.touched" class="has-text-danger">
+                                Add a Contract Start Date
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Choose a Contract End Date</mat-label>
+                            <input matInput [min]="start_date.value" formControlName="end_date" [matDatepicker]="picker1" />
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                            <mat-error *ngIf="end_date.invalid && end_date.touched" class="has-text-danger">
+                                Add a Contract End Date
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <button type="submit" mat-raised-button [disabled]="contractForm.invalid || newHotel && hotelForm.invalid" (click)="onSubmit()" color="primary">
+          Save Contract
+        </button>
+                <div [ngStyle]="{'margin-bottom': !newHotel ? '125px' : null}"></div>
+            </form>
+        </div>
+    </div>
+</div>

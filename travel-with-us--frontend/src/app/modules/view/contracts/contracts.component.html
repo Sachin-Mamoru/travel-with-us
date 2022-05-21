@@ -1,0 +1,32 @@
+<div style="padding: 1%;" class="contract-search">
+    <div>
+        <mat-form-field floatLabel="never" class="search-field" appearance="fill" style="width: 30%;">
+            <mat-label>Search Contracts</mat-label>
+            <input matInput placeholder="Search Contracts" type="text" (keyup)="onKey($event)" />
+        </mat-form-field>
+    </div>
+
+    <div *ngIf="contracts.length > 0" class="w-100 text-center row">
+        <div *ngFor="let contract of contracts; let i=index" class="col-md-4 col-lg-3 mb-1 mt-1 text-center ">
+            <mat-card style=" border: 1px solid; background-color: rgba(255,255,255,0.6);">
+                <mat-card-content align="left ">
+                    <h4><b>Contract Name</b>: {{ contract.name }}</h4>
+                    <h4><b>Hotel Name</b>: {{ contract.hotel.hotelName }}</h4>
+                    <h5><b>Contract Markup</b>: {{ contract.markup }}</h5>
+                    <h5><b>Contract Start Date</b>: {{ contract.startDate | date }}</h5>
+                    <h5><b>Contract End Date</b>: {{ contract.endDate | date }}</h5>
+                    <button mat-raised-button type="button">
+          View
+        </button>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+
+  <div *ngIf="contracts.length == 0 && !isLoadContracts">
+    <h1 class="no-rooms">Wait Still Loading <span><mat-icon style="font-size: 72px; vertical-align: text-top;">sentiment_very_dissatisfied</mat-icon></span></h1>
+  </div>
+  <div *ngIf="contracts.length == 0 && isLoadContracts">
+    <h1 class="no-rooms">No Results <span><mat-icon style="font-size: 72px; vertical-align: text-top;">sentiment_very_dissatisfied</mat-icon></span></h1>
+  </div>
+</div>

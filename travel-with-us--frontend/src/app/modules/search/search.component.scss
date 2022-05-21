@@ -1,0 +1,65 @@
+div.search {
+    background-color: antiquewhite;
+    padding: 1%;
+    height: 84px;
+}
+
+.mat-form-field {
+    width: 100%;
+}
+
+.search-btn {
+    width: inherit;
+    font-size: large;
+}
+
+.card {
+    width: 100%;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: 1%;
+    margin-top: 1%;
+}
+
+.card-header {
+    font-size: 2rem;
+}
+
+.total-price {
+    border: solid 1px black;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: rgb(64, 199, 64);
+    color: white;
+    text-align: center;
+}
+
+.tbl-headers {
+    text-align: center;
+}
+
+.tbl-columns {
+    text-align: center;
+}
+
+.no-rooms {
+    font-size: 60px;
+    text-align: center;
+    margin-top: 10%;
+}
+
+@media only screen and (max-width: 800px) {
+    .delete-btn {
+        width: 100%;
+    }
+    .mat-icon {
+        border-radius: 5px !important;
+        width: 100% !important;
+    }
+    div.search {
+        height: 307px;
+    }
+    .no-rooms {
+        font-size: 30px;
+    }
+}

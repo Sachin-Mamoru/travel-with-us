@@ -1,0 +1,157 @@
+<div class="search">
+    <form [formGroup]="searchForm">
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <mat-form-field appearance="fill">
+                    <mat-label>Check in Date</mat-label>
+                    <input matInput [min]="minDate" formControlName="check_in_date" [matDatepicker]="picker" />
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="check_in_date.invalid && check_in_date.touched" class="has-text-danger">
+                        Add a check in date
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-2">
+                <mat-form-field appearance="fill">
+                    <mat-label>No of Nights</mat-label>
+                    <input matInput type="number" placeholder="No of Nights" formControlName="no_of_nights" autocomplete="off" />
+                    <mat-error *ngIf="no_of_nights.invalid && no_of_nights.touched" class="has-text-danger">
+                        Add No of Nights
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-5">
+                <mat-expansion-panel style="overflow: visible; z-index: 1;">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            No of Rooms
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            Type your room count
+                            <!-- <mat-icon>add_outline</mat-icon> -->
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <div formArrayName="rooms">
+                        <div class="form-group" *ngFor="let room of rooms.controls; let i = index">
+                            <div [formGroupName]="i">
+                                <div class="form-row">
+                                    <div class="form-group col-md-5">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>No of Rooms</mat-label>
+                                            <input matInput type="number" placeholder="No of Rooms" formControlName="no_of_rooms" />
+                                            <mat-error *ngIf="no_of_rooms(i).invalid && no_of_rooms(i).touched" class="has-text-danger">
+                                                Add no of rooms
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>No of Adults</mat-label>
+                                            <input matInput type="number" placeholder="No of Adults" formControlName="no_of_adults" />
+                                            <mat-error *ngIf="no_of_adults(i).invalid && no_of_adults(i).touched" class="has-text-danger">
+                                                Add no of adults
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <button class="delete-btn" matSuffix mat-icon-button type="button" (click)="onDeleteRoom(i)">
+                                            <mat-icon style="vertical-align: text-top; border: solid 1px black; border-radius: 50%; padding: 5px; height: 35px; width: 35px;">delete</mat-icon>
+                                          </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button mat-stroked-button style="width: 100%; margin-bottom: 5%;" type="button" (click)="onAddRoom()">
+                        <b>+ Add Room</b>
+                      </button>
+                </mat-expansion-panel>
+            </div>
+            <div class="form-group col-md-3" style="text-align: center;">
+                <button class="search-btn" [disabled]="searchForm.invalid" mat-raised-button color="primary" style="margin-top: 2%; z-index: 1;" (click)="onSearch()">
+                    Search
+                  </button>
+            </div>
+        </div>
+    </form>
+</div>
+<div *ngIf="isSearching">
+    <div class="row" style="margin: 0px;" *ngFor="let contract of contracts; let i = index">
+        <div class="card">
+            <h5 class="card-header" style="padding: 10px; background-color: rgb(99, 105, 192); color: white;">{{contract.hotel.hotelName}}</h5>
+            <div class="card-body">
+                <div class="row">
+                    <h3 class="col-md-3" style="align-self: center;">Hotel Address : {{contract.hotel.address}}</h3>
+                    <h3 class="col-md-3" style="align-self: center;">Hotel email : {{contract.hotel.email}}</h3>
+                    <h1 class="total-price col-md-3">Total Price : $ {{contract.roomTotalPrice}}</h1>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="tbl-headers" scope="col">Room Type</th>
+                        <th class="tbl-headers" scope="col">Price</th>
+                        <th class="tbl-headers" scope="col">Max Adults</th>
+                        <th class="tbl-headers" scope="col">Remaining rooms</th>
+                        <th class="tbl-headers" scope="col">Occupied Adults</th>
+                        <th class="tbl-headers" scope="col">Occupied Rooms</th>
+                        <th class="tbl-headers" scope="col">Rooms Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let roomType of contract.roomTypeDtos; let j = index" [ngStyle]="{'background-color': roomType.roomNo !== 0 ? 'rgb(228, 210, 111);' : null}">
+                        <th class="tbl-headers" scope="row">{{roomType.typeName}}</th>
+                        <td class="tbl-columns">$ {{roomType.price}}</td>
+                        <td class="tbl-columns">{{roomType.maxAdults}}</td>
+                        <td class="tbl-columns">{{roomType.noOfRooms - roomType.roomNo}}</td>
+                        <td class="tbl-columns">{{roomType.roomAdult}}</td>
+                        <td class="tbl-columns">{{roomType.roomNo}}</td>
+                        <td class="tbl-columns">$ {{roomType.roomPrice}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!isSearching">
+    <div class="row" style="margin: 0px;" *ngFor="let contract of contracts; let i = index">
+        <div class="card">
+            <h5 class="card-header" style="padding: 10px; background-color: rgb(99, 105, 192); color: white;">{{contract.hotel.hotelName}}</h5>
+            <div class="card-body">
+                <div class="row">
+                    <h3 class="col-md-3" style="align-self: center;">Hotel Address : {{contract.hotel.address}}</h3>
+                    <h3 class="col-md-3" style="align-self: center;">Hotel email : {{contract.hotel.email}}</h3>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="tbl-headers" scope="col">Room Type</th>
+                        <th class="tbl-headers" scope="col">Price</th>
+                        <th class="tbl-headers" scope="col">Max Adults</th>
+                        <th class="tbl-headers" scope="col">Total rooms</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let roomType of contract.roomTypes; let j = index">
+                        <th class="tbl-headers" scope="row">{{roomType.typeName}}</th>
+                        <td class="tbl-columns">$ {{roomType.price}}</td>
+                        <td class="tbl-columns">{{roomType.maxAdults}}</td>
+                        <td class="tbl-columns">{{roomType.noOfRooms}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="contracts.length == 0 && initialContracts.length > 0">
+    <h1 class="no-rooms">No Rooms Available <span><mat-icon style="font-size: 72px; vertical-align: text-top;">sentiment_very_dissatisfied</mat-icon></span></h1>
+</div>
+
+<div *ngIf="initialContracts.length == 0">
+  <h1 class="no-rooms">Wait Still Loading <span><mat-icon style="font-size: 72px; vertical-align: text-top;">sentiment_very_dissatisfied</mat-icon></span></h1>
+</div>

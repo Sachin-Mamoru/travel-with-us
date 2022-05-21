@@ -1,0 +1,41 @@
+<div style="padding: 1%;" class="hotel-search">
+    <div>
+        <mat-form-field floatLabel="never" class="search-field" appearance="fill" style="width: 30%;">
+            <mat-label>Search Hotels</mat-label>
+            <input matInput placeholder="Search Hotels" type="text" (keyup)="onKey($event)" />
+        </mat-form-field>
+    </div>
+
+    <div *ngIf="hotels.length > 0" class="w-100 text-center row">
+        <div *ngFor="let hotel of hotels; let i = index" class="col-md-4 col-lg-3 mb-1 mt-1 text-center">
+            <mat-card style="border: 1px solid; background-color: rgba(255, 255, 255, 0.6);">
+                <mat-card-content align="left ">
+                    <h4><b>Hotel Name</b>: {{ hotel.hotelName }}</h4>
+                    <h4><b>Hotel Email</b>: {{ hotel.email }}</h4>
+                    <mat-expansion-panel style="width: 70%; margin-bottom: 10px;">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Phone Numbers
+                            </mat-panel-title>
+                            <mat-panel-description> </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <p *ngFor="let phone of hotel.phone; let i = index" style="margin-bottom: 8px;">
+                            {{ phone.no }}
+                            <mat-divider></mat-divider>
+                        </p>
+                    </mat-expansion-panel>
+                    <button mat-raised-button type="button">
+            View
+          </button>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+
+  <div *ngIf="hotels.length == 0 && !isLoadHotels">
+    <h1 class="no-rooms">Wait Still Loading <span><mat-icon style="font-size: 72px; vertical-align: text-top;">sentiment_very_dissatisfied</mat-icon></span></h1>
+  </div>
+  <div *ngIf="hotels.length == 0 && isLoadHotels">
+    <h1 class="no-rooms">No Results <span><mat-icon style="font-size: 72px; vertical-align: text-top;">sentiment_very_dissatisfied</mat-icon></span></h1>
+  </div>
+</div>
